@@ -76,29 +76,29 @@ The **Agentic Bug Triage & Routing System** eliminates this manual overhead. It 
 
 ## 📸 Application Screenshots
 
-### 1. Main Dashboard
-<p align="center">
-  <img src="./images/dashboard.png" alt="Main Dashboard" width="850" />
-</p>
-
-### 2. Auto-Discovered Bug List
+### 1. Auto-Discovered Bug List
 <p align="center">
   <img src="./images/bug_view.png" alt="Auto-Discovered Bug List" width="850" />
 </p>
 
-### 3. Triage History Log
-<p align="center">
-  <img src="./images/triage_history.png" alt="Triage History Log" width="850" />
-</p>
-
-### 4. Dynamic Connector Settings
+### 2. Dynamic Connector Settings
 <p align="center">
   <img src="./images/connector_settings.png" alt="Dynamic Connector Settings" width="850" />
 </p>
 
-### 5. Detailed AI Triage Synthesis Panel
+### 3. Detailed AI Triage Panel
 <p align="center">
-  <img src="./images/triage_details.png" alt="Detailed AI Triage Synthesis Panel" width="850" />
+  <img src="./images/triage_details.png" alt="Detailed AI Triage Panel" width="850" />
+</p>
+
+### 4. Main Dashboard
+<p align="center">
+  <img src="./images/dashboard.png" alt="Main Dashboard" width="850" />
+</p>
+
+### 5. Triage History Log
+<p align="center">
+  <img src="./images/triage_history.png" alt="Triage History Log" width="850" />
 </p>
 
 ---
