@@ -59,12 +59,19 @@ The **Agentic Bug Triage & Routing System** eliminates this manual overhead. It 
 ## ✨ Key Features
 
 - **🌐 Unified Bug Dashboard** — Aggregates a near real-time, read-only view of open issues across JIRA (Cloud & On-Prem), GitHub, Bugzilla, and Confluence.
+<br>
 - **🤖 Four-Agent Autonomous Pipeline** — `ContextFetchAgent` → `CrossSystemFetchAgent` + `EnrichmentAgent` (parallel) → `AISynthesisAgent`.
+<br>
 - **⚡ Progressive WebSocket Streaming** — Results are streamed panel-by-panel as each agent completes. Engineers see data within seconds, not minutes.
+<br>
 - **🎯 Structured AI Triage Output** — Generates severity (P0–P3), root-cause hypothesis, confidence score, affected components, and recommended actions.
+<br>
 - **📊 Cross-System Correlation** — Identifies duplicate and semantically related issues across all connected systems using multi-query LLM search and similarity scoring.
+<br>
 - **📚 Knowledge Base Enrichment** — Uses a ReAct (Reason + Act) loop to iteratively search Confluence and surface relevant runbooks and historical fixes.
+<br>
 - **🔌 Dynamic Connector Registry** — New source systems can be added via configuration without touching pipeline logic.
+<br>
 - **🛡️ Fault-Tolerant Architecture** — Kafka-backed event processing with PostgreSQL pipeline checkpointing enables crash recovery mid-triage.
 
 
