@@ -18,10 +18,6 @@
     <img src="https://img.shields.io/badge/License-MIT-green" />
   </p>
 
-  <p align="center">
-    <img src="./images/dashboard.png" alt="System Dashboard" width="900" />
-  </p>
-
 </div>
 
 ---
@@ -71,34 +67,39 @@ The **Agentic Bug Triage & Routing System** eliminates this manual overhead. It 
 - **🔌 Dynamic Connector Registry** — New source systems can be added via configuration without touching pipeline logic.
 - **🛡️ Fault-Tolerant Architecture** — Kafka-backed event processing with PostgreSQL pipeline checkpointing enables crash recovery mid-triage.
 
-### 🖥️ Dashboard & Features Walkthrough
-
-<p align="center">
-  <b>Auto-Discovered Bug List</b>
-  <br />
-  <img src="./images/bug_view.png" alt="Auto-Discovered Bugs" width="850" />
-</p>
-
-<p align="center">
-  <b>Triage History Log</b>
-  <br />
-  <img src="./images/triage_history.png" alt="Triage History" width="850" />
-</p>
-
-<p align="center">
-  <b>Dynamic Connector Settings</b>
-  <br />
-  <img src="./images/connector_settings.png" alt="Connector Settings" width="850" />
-</p>
-
----
 
 ## 🏗️ System Architecture
 
 ![System Architecture](./architecture.png)
 
+---
 
+## 📸 Application Screenshots
 
+### 1. Main Dashboard
+<p align="center">
+  <img src="./images/dashboard.png" alt="Main Dashboard" width="850" />
+</p>
+
+### 2. Auto-Discovered Bug List
+<p align="center">
+  <img src="./images/bug_view.png" alt="Auto-Discovered Bug List" width="850" />
+</p>
+
+### 3. Triage History Log
+<p align="center">
+  <img src="./images/triage_history.png" alt="Triage History Log" width="850" />
+</p>
+
+### 4. Dynamic Connector Settings
+<p align="center">
+  <img src="./images/connector_settings.png" alt="Dynamic Connector Settings" width="850" />
+</p>
+
+### 5. Detailed AI Triage Synthesis Panel
+<p align="center">
+  <img src="./images/triage_details.png" alt="Detailed AI Triage Synthesis Panel" width="850" />
+</p>
 
 ---
 
@@ -113,11 +114,6 @@ Each agent receives a shared `context` dictionary, performs its task, and passes
 | **2b** | `EnrichmentAgent` | Llama 3.1 8B (ReAct loop) | Iteratively searches Confluence using a self-correcting ReAct loop (max 4 iterations) to surface relevant KB articles |
 | **3** | `AISynthesisAgent` | Llama 3.3 70B | Reads all gathered context and generates structured JSON: severity, root cause, confidence score, affected components, recommended actions |
 
-<p align="center">
-  <b>Detailed AI Triage Synthesis Panel</b>
-  <br />
-  <img src="./images/triage_details.png" alt="Triage Synthesis Details" width="850" />
-</p>
 
 ---
 
