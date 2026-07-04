@@ -18,6 +18,10 @@
     <img src="https://img.shields.io/badge/License-MIT-green" />
   </p>
 
+  <p align="center">
+    <img src="./images/dashboard.png" alt="System Dashboard" width="900" />
+  </p>
+
 </div>
 
 ---
@@ -67,6 +71,26 @@ The **Agentic Bug Triage & Routing System** eliminates this manual overhead. It 
 - **🔌 Dynamic Connector Registry** — New source systems can be added via configuration without touching pipeline logic.
 - **🛡️ Fault-Tolerant Architecture** — Kafka-backed event processing with PostgreSQL pipeline checkpointing enables crash recovery mid-triage.
 
+### 🖥️ Dashboard & Features Walkthrough
+
+<p align="center">
+  <b>Auto-Discovered Bug List</b>
+  <br />
+  <img src="./images/bug_view.png" alt="Auto-Discovered Bugs" width="850" />
+</p>
+
+<p align="center">
+  <b>Triage History Log</b>
+  <br />
+  <img src="./images/triage_history.png" alt="Triage History" width="850" />
+</p>
+
+<p align="center">
+  <b>Dynamic Connector Settings</b>
+  <br />
+  <img src="./images/connector_settings.png" alt="Connector Settings" width="850" />
+</p>
+
 ---
 
 ## 🏗️ System Architecture
@@ -88,6 +112,12 @@ Each agent receives a shared `context` dictionary, performs its task, and passes
 | **2a** | `CrossSystemFetchAgent` | Llama 3.1 8B (query gen) + Llama 3.3 70B (scoring) | Generates multi-variant search queries, fires them against all connected systems via `asyncio.gather()`, scores candidates by semantic similarity (threshold: 0.6) |
 | **2b** | `EnrichmentAgent` | Llama 3.1 8B (ReAct loop) | Iteratively searches Confluence using a self-correcting ReAct loop (max 4 iterations) to surface relevant KB articles |
 | **3** | `AISynthesisAgent` | Llama 3.3 70B | Reads all gathered context and generates structured JSON: severity, root cause, confidence score, affected components, recommended actions |
+
+<p align="center">
+  <b>Detailed AI Triage Synthesis Panel</b>
+  <br />
+  <img src="./images/triage_details.png" alt="Triage Synthesis Details" width="850" />
+</p>
 
 ---
 
