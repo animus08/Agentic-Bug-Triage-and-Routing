@@ -58,23 +58,57 @@ The **Agentic Bug Triage & Routing System** eliminates this manual overhead. It 
 
 ## ✨ Key Features
 
-- **🌐 Unified Bug Dashboard** — Aggregates a near real-time, read-only view of open issues across JIRA (Cloud & On-Prem), GitHub, Bugzilla, and Confluence.
-- **🤖 Four-Agent Autonomous Pipeline** — `ContextFetchAgent` → `CrossSystemFetchAgent` + `EnrichmentAgent` (parallel) → `AISynthesisAgent`.
-- **⚡ Progressive WebSocket Streaming** — Results are streamed panel-by-panel as each agent completes. Engineers see data within seconds, not minutes.
-- **🎯 Structured AI Triage Output** — Generates severity (P0–P3), root-cause hypothesis, confidence score, affected components, and recommended actions.
-- **📊 Cross-System Correlation** — Identifies duplicate and semantically related issues across all connected systems using multi-query LLM search and similarity scoring.
-- **📚 Knowledge Base Enrichment** — Uses a ReAct (Reason + Act) loop to iteratively search Confluence and surface relevant runbooks and historical fixes.
-- **🔌 Dynamic Connector Registry** — New source systems can be added via configuration without touching pipeline logic.
-- **🛡️ Fault-Tolerant Architecture** — Kafka-backed event processing with PostgreSQL pipeline checkpointing enables crash recovery mid-triage.
+<ul>
+  <li><b>🌐 Unified Bug Dashboard</b> — Aggregates a near real-time, read-only view of open issues across JIRA (Cloud & On-Prem), GitHub, Bugzilla, and Confluence.</li>
+  <br />
+  <li><b>🤖 Four-Agent Autonomous Pipeline</b> — <code>ContextFetchAgent</code> → <code>CrossSystemFetchAgent</code> + <code>EnrichmentAgent</code> (parallel) → <code>AISynthesisAgent</code>.</li>
+  <br />
+  <li><b>⚡ Progressive WebSocket Streaming</b> — Results are streamed panel-by-panel as each agent completes. Engineers see data within seconds, not minutes.</li>
+  <br />
+  <li><b>🎯 Structured AI Triage Output</b> — Generates severity (P0–P3), root-cause hypothesis, confidence score, affected components, and recommended actions.</li>
+  <br />
+  <li><b>📊 Cross-System Correlation</b> — Identifies duplicate and semantically related issues across all connected systems using multi-query LLM search and similarity scoring.</li>
+  <br />
+  <li><b>📚 Knowledge Base Enrichment</b> — Uses a ReAct (Reason + Act) loop to iteratively search Confluence and surface relevant runbooks and historical fixes.</li>
+  <br />
+  <li><b>🔌 Dynamic Connector Registry</b> — New source systems can be added via configuration without touching pipeline logic.</li>
+  <br />
+  <li><b>🛡️ Fault-Tolerant Architecture</b> — Kafka-backed event processing with PostgreSQL pipeline checkpointing enables crash recovery mid-triage.</li>
+</ul>
 
----
 
 ## 🏗️ System Architecture
 
 ![System Architecture](./architecture.png)
 
+---
 
+## 📸 Application Screenshots
 
+### 1. Auto-Discovered Bug List
+<p align="center">
+  <img src="./images/bug_view.png" alt="Auto-Discovered Bug List" width="850" />
+</p>
+
+### 2. Dynamic Connector Settings
+<p align="center">
+  <img src="./images/connector_settings.png" alt="Dynamic Connector Settings" width="850" />
+</p>
+
+### 3. Detailed AI Triage Panel
+<p align="center">
+  <img src="./images/triage_details.png" alt="Detailed AI Triage Panel" width="850" />
+</p>
+
+### 4. Main Dashboard
+<p align="center">
+  <img src="./images/dashboard.png" alt="Main Dashboard" width="850" />
+</p>
+
+### 5. Triage History Log
+<p align="center">
+  <img src="./images/triage_history.png" alt="Triage History Log" width="850" />
+</p>
 
 ---
 
@@ -88,6 +122,7 @@ Each agent receives a shared `context` dictionary, performs its task, and passes
 | **2a** | `CrossSystemFetchAgent` | Llama 3.1 8B (query gen) + Llama 3.3 70B (scoring) | Generates multi-variant search queries, fires them against all connected systems via `asyncio.gather()`, scores candidates by semantic similarity (threshold: 0.6) |
 | **2b** | `EnrichmentAgent` | Llama 3.1 8B (ReAct loop) | Iteratively searches Confluence using a self-correcting ReAct loop (max 4 iterations) to surface relevant KB articles |
 | **3** | `AISynthesisAgent` | Llama 3.3 70B | Reads all gathered context and generates structured JSON: severity, root cause, confidence score, affected components, recommended actions |
+
 
 ---
 
