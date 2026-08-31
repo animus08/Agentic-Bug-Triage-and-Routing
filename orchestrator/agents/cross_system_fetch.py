@@ -65,7 +65,7 @@ class CrossSystemFetchAgent(BaseAgent):
         signals.extend(await self._discover_semantic_live(primary, targets))
         signals.extend(await self._discover_cache(primary, targets))
         log.info('CrossSystem discovery signals', total=len(signals), outbound=sum((1 for s in signals if 'outbound_reference' in (s.get('provenance') or []))), reverse=sum((1 for s in signals if 'reverse_reference_search' in (s.get('provenance') or []))), semantic=sum((1 for s in signals if 'semantic_live_search' in (s.get('provenance') or []))), cache=sum((1 for s in signals if 'redis_cache' in (s.get('provenance') or []))))
-        signals = self._prioritize_signals(signals, limit=25)
+        signals = self._prioritize_signals(signals, limit=15)
         candidates = await self._hydrate_and_merge_signals(signals, targets)
         log.info('CrossSystem candidates hydrated', count=len(candidates))
         scored = await self._score_candidates(primary, candidates)
@@ -480,7 +480,7 @@ class CrossSystemFetchAgent(BaseAgent):
         if not candidates:
             return []
         api_key = os.getenv('GROQ_API_KEY', '')
-        model = os.getenv('GROQ_MODEL', 'llama-3.3-70b-versatile')
+        model = os.getenv('GROQ_MODEL', 'openai/gpt-oss-120b')
         if not api_key or AsyncGroq is None:
             if api_key and AsyncGroq is None:
                 log.warning('CrossSystem Groq unavailable; using deterministic scoring')
@@ -495,11 +495,13 @@ class CrossSystemFetchAgent(BaseAgent):
             except Exception as e:
                 log.warning('CrossSystem Groq scoring batch failed', error=str(e))
                 return self._deterministic_score(primary, batch)
-        batches = [candidates[i:i + 20] for i in range(0, len(candidates), 20)]
-        results = await asyncio.gather(*(score_batch(batch) for batch in batches))
+        batches = [candidates[i:i + 5] for i in range(0, len(candidates), 5)]
         scored = []
-        for batch_result in results:
+        for batch in batches:
+            batch_result = await score_batch(batch)
             scored.extend(batch_result)
+            if len(batches) > 1:
+                await asyncio.sleep(1.0)
         return scored
 
     async def _score_with_groq(self, primary: dict, candidates: list[dict], api_key: str, model: str) -> list[dict]:
@@ -769,7 +771,7 @@ class CrossSystemFetchAgent(BaseAgent):
     async def _semantic_queries(self, primary: dict) -> list[str]:
         queries = self._deterministic_queries(primary)
         api_key = os.getenv('GROQ_API_KEY', '')
-        model = os.getenv('GROQ_MODEL', 'llama-3.3-70b-versatile')
+        model = os.getenv('GROQ_MODEL', 'openai/gpt-oss-120b')
         if not api_key or AsyncGroq is None:
             return queries
         try:
@@ -782,7 +784,7 @@ class CrossSystemFetchAgent(BaseAgent):
     async def _generate_platform_queries(self, primary: dict, api_key: str, model: str) -> dict:
         prompt = {'task': 'Generate precise bug search queries.', 'rules': ['Return JSON object only.', 'Use exact developer vocabulary.', 'Prefer exception names, class/method names, file names, config names, and short error phrases.', 'Avoid generic words like bug, issue, error, fix, problem.'], 'bug': {'title': primary.get('title', ''), 'component': primary.get('component', ''), 'error_excerpt': primary.get('error_excerpt', '')[:400], 'description': primary.get('description', '')[:500]}, 'schema': {'specific_query': '2-4 precise terms', 'component_error_query': 'component plus concrete symptom', 'broad_query': '2-4 ecosystem terms'}}
         client = AsyncGroq(api_key=api_key)
-        resp = await client.chat.completions.create(model=model, messages=[{'role': 'user', 'content': json.dumps(prompt)}], temperature=0.0, response_format={'type': 'json_object'}, max_tokens=180)
+        resp = await client.chat.completions.create(model=model, messages=[{'role': 'user', 'content': json.dumps(prompt)}], temperature=0.0, max_tokens=180)
         parsed = self._parse_json_response(resp.choices[0].message.content or '{}')
         if not isinstance(parsed, dict):
             return {}
