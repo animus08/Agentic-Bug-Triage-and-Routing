@@ -175,7 +175,7 @@ class EnrichmentAgent(BaseAgent):
         error_excerpt = (primary.get("error_excerpt") or "")[:300]
 
         groq_api_key = os.getenv("GROQ_API_KEY", "")
-        enrichment_model = "llama-3.1-8b-instant"
+        enrichment_model = "openai/gpt-oss-120b"
 
         # Determine correct Confluence space
         target_space = self._resolve_target_space(source_id)
@@ -323,8 +323,24 @@ class EnrichmentAgent(BaseAgent):
                         parsed = json.loads(raw)
                         if isinstance(parsed, list) and parsed:
                             return parsed
+                        if iteration < MAX_REACT_ITERS - 1:
+                            messages.append({
+                                "role": "user",
+                                "content": (
+                                    "Your final answer was empty. You must try a different, "
+                                    "broader search query using search_confluence or "
+                                    "search_stackoverflow to find relevant articles. Do not give up."
+                                )
+                            })
+                            continue
                         return seen_articles if seen_articles else []
                     except Exception:
+                        if iteration < MAX_REACT_ITERS - 1:
+                            messages.append({
+                                "role": "user",
+                                "content": "Failed to parse final answer as a JSON list. Please try a different search query or format."
+                            })
+                            continue
                         return seen_articles if seen_articles else []
 
                 if "Action: search_confluence" in reply and "Action Input:" in reply:

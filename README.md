@@ -10,7 +10,7 @@
     <img src="https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white" />
     <img src="https://img.shields.io/badge/FastAPI-0.111-009688?logo=fastapi&logoColor=white" />
     <img src="https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black" />
-    <img src="https://img.shields.io/badge/LLM-Llama%203.3%2070B-blueviolet?logo=meta" />
+    <img src="https://img.shields.io/badge/LLM-GPT--OSS%20120B-blueviolet?logo=meta" />
     <img src="https://img.shields.io/badge/Kafka-Event--Driven-231F20?logo=apachekafka&logoColor=white" />
     <img src="https://img.shields.io/badge/Redis-Caching-DC382D?logo=redis&logoColor=white" />
     <img src="https://img.shields.io/badge/PostgreSQL-Database-336791?logo=postgresql&logoColor=white" />
@@ -119,9 +119,9 @@ Each agent receives a shared `context` dictionary, performs its task, and passes
 | Phase | Agent | Model | Task |
 |---|---|---|---|
 | **1** | `ContextFetchAgent` | — | Fetches full ticket details, comments, metadata and normalizes into `TicketData` |
-| **2a** | `CrossSystemFetchAgent` | Llama 3.1 8B (query gen) + Llama 3.3 70B (scoring) | Generates multi-variant search queries, fires them against all connected systems via `asyncio.gather()`, scores candidates by semantic similarity (threshold: 0.6) |
-| **2b** | `EnrichmentAgent` | Llama 3.1 8B (ReAct loop) | Iteratively searches Confluence using a self-correcting ReAct loop (max 4 iterations) to surface relevant KB articles |
-| **3** | `AISynthesisAgent` | Llama 3.3 70B | Reads all gathered context and generates structured JSON: severity, root cause, confidence score, affected components, recommended actions |
+| **2a** | `CrossSystemFetchAgent` | GPT-OSS 20B (query gen) + GPT-OSS 120B (scoring) | Generates multi-variant search queries, fires them against all connected systems via `asyncio.gather()`, scores candidates by semantic similarity (threshold: 0.6) |
+| **2b** | `EnrichmentAgent` | GPT-OSS 120B (ReAct loop) | Iteratively searches Confluence using a self-correcting ReAct loop (max 4 iterations) to surface relevant KB articles |
+| **3** | `AISynthesisAgent` | GPT-OSS 120B | Reads all gathered context and generates structured JSON: severity, root cause, confidence score, affected components, recommended actions |
 
 
 ---
@@ -143,8 +143,8 @@ Each agent receives a shared `context` dictionary, performs its task, and passes
 
 | Layer | Technology |
 |---|---|
-| **Primary LLM** | Meta Llama 3.3 70B via Groq (synthesis & scoring) |
-| **Utility LLM** | Meta Llama 3.1 8B via Groq (query gen, ReAct loop) |
+| **Primary LLM** | GPT-OSS 120B via Groq (synthesis & scoring) |
+| **Utility LLM** | GPT-OSS 20B via Groq (query gen) |
 | **Agent Pattern** | Stateless context-passing + ReAct (Reason + Act) |
 | **Output Validation** | Pydantic strict schema validation |
 | **Concurrency** | `asyncio.gather()` for parallel agent execution |
@@ -254,7 +254,7 @@ ENABLE_LOCAL_PIPELINE_FALLBACK=true
 
 # ── LLM (Groq) ────────────────────────────────────────────────────────
 GROQ_API_KEY=your_groq_api_key_here
-GROQ_MODEL=llama-3.3-70b-versatile
+GROQ_MODEL=openai/gpt-oss-120b
 GROQ_TEMPERATURE=0.0
 LOG_FORMAT=console
 

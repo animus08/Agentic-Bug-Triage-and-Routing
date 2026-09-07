@@ -41,7 +41,7 @@ class AISynthesisAgent(BaseAgent):
         )
 
         groq_api_key = os.getenv("GROQ_API_KEY", "")
-        groq_model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+        groq_model = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 
         if not groq_api_key:
             context["synthesis"] = self._keyword_fallback(primary).model_dump()
@@ -125,7 +125,7 @@ class AISynthesisAgent(BaseAgent):
                     f"{prompt[:500]}"
                 )
                 repair_resp = await repair_client.chat.completions.create(
-                    model="llama-3.1-8b-instant",
+                    model="openai/gpt-oss-120b",
                     messages=[{"role": "user", "content": repair_prompt}],
                     temperature=0.0,
                     seed=42,
